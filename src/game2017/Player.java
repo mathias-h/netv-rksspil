@@ -5,15 +5,16 @@ public class Player {
 	int xpos;
 	int ypos;
 	int point;
-	String direction;
+	Direction direction;
 
-	public Player(String name, int xpos, int ypos, String direction) {
+	public Player(String name, int xpos, int ypos, Direction direction) {
 		this.name = name;
 		this.xpos = xpos;
 		this.ypos = ypos;
 		this.direction = direction;
 		this.point = 0;
 	}
+	
 
 	public int getXpos() {
 		return xpos;
@@ -27,10 +28,10 @@ public class Player {
 	public void setYpos(int ypos) {
 		this.ypos = ypos;
 	}
-	public String getDirection() {
+	public Direction getDirection() {
 		return direction;
 	}
-	public void setDirection(String direction) {
+	public void setDirection(Direction direction) {
 		this.direction = direction;
 	}
 	public void addPoints(int p) {

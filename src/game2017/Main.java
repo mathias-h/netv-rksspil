@@ -2,6 +2,7 @@ package game2017;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 import javafx.application.Application;
 import javafx.geometry.Insets;
@@ -14,7 +15,10 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.text.*;
 
 public class Main extends Application {
-
+	public static final String name = "Mathias";
+	public static final int posX = 2;
+	public static final int posY = 2;
+	public static final Direction dir = Direction.UP;
     public static final int size = 20;
     public static final int scene_height = size * 20 + 100;
     public static final int scene_width = size * 20 + 200;
@@ -60,7 +64,9 @@ public class Main extends Application {
     // -------------------------------------------
 
     @Override
-    public void start(Stage primaryStage) {
+    public void start(Stage primaryStage) throws Exception {
+    	Server server = new Server(this);
+    	
         try {
             GridPane grid = new GridPane();
             grid.setHgap(10);
@@ -119,80 +125,119 @@ public class Main extends Application {
             primaryStage.show();
 
             scene.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
-                switch (event.getCode()) {
-                case UP:
-                    playerMoved(0, -1, "up");
-                    break;
-                case DOWN:
-                    playerMoved(0, +1, "down");
-                    break;
-                case LEFT:
-                    playerMoved(-1, 0, "left");
-                    break;
-                case RIGHT:
-                    playerMoved(+1, 0, "right");
-                    break;
-                default:
-                    break;
-                }
+            	MoveCommand c = null;
+            	try {
+	                switch (event.getCode()) {
+		                case UP:
+		                	c = new MoveCommand(me.name, 0, -1, Direction.UP);
+		                    break;
+		                case DOWN:
+		                	c = new MoveCommand(me.name, 0, +1, Direction.DOWN);
+		                    break;
+		                case LEFT:
+		                	c = new MoveCommand(me.name, -1, 0, Direction.LEFT);
+		                    break;
+		                case RIGHT:
+		                	c = new MoveCommand(me.name, +1, 0, Direction.RIGHT);
+		                    break;
+		                default:
+		                    break;
+	                }
+	                
+	                if (c != null) {
+	                	server.sendCommand(c);
+	                	playerMoved(c);
+	                }
+                } catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
             });
 
             // Setting up standard players
 
-            me = new Player("Orville", 9, 4, "up");
-            players.add(me);
-            fields[9][4].setGraphic(new ImageView(hero_up));
-
-            Player harry = new Player("Harry", 14, 15, "up");
-            players.add(harry);
-            fields[14][15].setGraphic(new ImageView(hero_up));
-
+            me = addPlayer(name, posX, posY, Direction.UP);
+            
             scoreList.setText(getScoreList());
         }
         catch (Exception e) {
             e.printStackTrace();
         }
     }
+    
+    public Player addPlayer(String name, int posX, int podY, Direction dir) {
+    	Player p = new Player(name, posX, podY, dir);
+    	Image heroImage = null;
+        players.add(p);
+        
+        switch (dir) {
+		case UP:
+			heroImage = hero_up;
+			break;
+		case DOWN:
+			heroImage = hero_down;
+			break;
+		case LEFT:
+			heroImage = hero_left;
+			break;
+		case RIGHT:
+			heroImage = hero_right;
+			break;
+		}
+        
+        fields[posX][podY].setGraphic(new ImageView(heroImage));
+        return p;
+    }
 
-    public void playerMoved(int delta_x, int delta_y, String direction) {
-        me.direction = direction;
-        int x = me.getXpos(), y = me.getYpos();
+    public void playerMoved(MoveCommand command) throws Exception {
+    	Player player = null;
+    	for (Player p : players) {
+    		if (p.name.equals(command.name)) {
+    			player = p;
+    		}
+    	}
+    	if (player == null) {
+    		throw new Exception("player not found: " + name);
+    	}
+    	
+        player.direction = command.dir;
+        int x = player.getXpos(), y = player.getYpos();
 
-        if (board[y + delta_y].charAt(x + delta_x) == 'w') {
-            me.addPoints(-1);
+        if (board[y + command.deltaY].charAt(x + command.deltaX) == 'w') {
+        	player.addPoints(-1);
         }
         else {
-            Player p = getPlayerAt(x + delta_x, y + delta_y);
+            Player p = getPlayerAt(x + command.deltaX, y + command.deltaY);
             if (p != null) {
-                me.addPoints(10);
+            	player.addPoints(10);
                 p.addPoints(-10);
             }
             else {
-                me.addPoints(1);
-
+            	player.addPoints(1);
+            	
                 fields[x][y].setGraphic(new ImageView(image_floor));
-                x += delta_x;
-                y += delta_y;
+                x += command.deltaX;
+                y += command.deltaY;
 
-                if (direction.equals("right")) {
-                    fields[x][y].setGraphic(new ImageView(hero_right));
-                }
-                ;
-                if (direction.equals("left")) {
-                    fields[x][y].setGraphic(new ImageView(hero_left));
-                }
-                ;
-                if (direction.equals("up")) {
-                    fields[x][y].setGraphic(new ImageView(hero_up));
-                }
-                ;
-                if (direction.equals("down")) {
-                    fields[x][y].setGraphic(new ImageView(hero_down));
-                }
-                ;
+                switch (command.dir) {
+					case UP:
+						fields[x][y].setGraphic(new ImageView(hero_up));
+						break;
+					case DOWN:
+						fields[x][y].setGraphic(new ImageView(hero_down));
+						break;
+					case LEFT:
+						fields[x][y].setGraphic(new ImageView(hero_left));
+						break;
+					case RIGHT:
+						fields[x][y].setGraphic(new ImageView(hero_right));
+						break;
+					default:
+						break;
+				}
 
-                me.setXpos(x);
-                me.setYpos(y);
+                player.setXpos(x);
+                player.setYpos(y);
             }
         }
         scoreList.setText(getScoreList());
@@ -216,6 +261,6 @@ public class Main extends Application {
     }
 
     public static void main(String[] args) {
-        launch(args);
+    	launch(args);
     }
 }
