@@ -15,8 +15,9 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.text.*;
 
 public class Main extends Application {
-    public static final String name = "Nicolai";
-    public static final int posX = 2;
+
+    public static final String name = "Mathias";
+    public static final int posX = 1;
     public static final int posY = 1;
     public static final Direction dir = Direction.UP;
     public static final int size = 20;
@@ -33,7 +34,7 @@ public class Main extends Application {
     private Label[][] fields;
     private TextArea scoreList;
 
-    private String[] board = {    // 20x20
+    private String[] board = { // 20x20
         "wwwwwwwwwwwwwwwwwwww",
         "w        ww        w",
         "w w  w  www w  w  ww",
@@ -53,14 +54,13 @@ public class Main extends Application {
         "w  w www  w w  ww ww",
         "w w      ww w     ww",
         "w   w   ww  w      w",
-        "wwwwwwwwwwwwwwwwwwww"
-    };
+        "wwwwwwwwwwwwwwwwwwww" };
 
     // -------------------------------------------
-    // | Maze: (0,0)              | Score: (1,0) |
+    // | Maze: (0,0) | Score: (1,0) |
     // |-----------------------------------------|
-    // | boardGrid (0,1)          | scorelist    |
-    // |                          | (1,1)        |
+    // | boardGrid (0,1) | scorelist |
+    // | | (1,1) |
     // -------------------------------------------
 
     @Override
@@ -114,6 +114,17 @@ public class Main extends Application {
                 }
             }
             scoreList.setEditable(false);
+
+            Button b = new Button("connect");
+            b.setOnAction(e -> {
+                try {
+                    server.connectToClients();
+                }
+                catch (Exception e1) {
+                    e1.printStackTrace();
+                }
+            });
+            grid.add(b, 0, 2);
 
             grid.add(mazeLabel, 0, 0);
             grid.add(scoreLabel, 1, 0);
@@ -266,4 +277,5 @@ public class Main extends Application {
     public static void main(String[] args) {
         launch(args);
     }
+
 }
