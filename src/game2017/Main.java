@@ -26,7 +26,7 @@ public class Main extends Application {
 	public static Player me;
 	public static List<Player> players = new ArrayList<Player>();
 
-	private Label[][] fields;
+	private Label[][] field;
 	private TextArea scoreList;
 	
 	private  String[] board = {    // 20x20
