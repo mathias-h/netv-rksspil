@@ -1,4 +1,4 @@
-package game2017;
+package model;
 
 import java.io.Serializable;
 
