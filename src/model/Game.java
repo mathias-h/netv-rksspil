@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import gui.BoardGui;
-import javafx.scene.image.ImageView;
 
 public class Game {
 	private final Tile[][] board;

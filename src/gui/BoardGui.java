@@ -8,7 +8,6 @@ import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
-import model.Direction;
 import model.Game;
 import model.Player;
 import model.Tile;

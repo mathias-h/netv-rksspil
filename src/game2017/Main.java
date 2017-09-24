@@ -1,8 +1,5 @@
 package game2017;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import gui.BoardGui;
 import javafx.application.Application;
 import javafx.geometry.Insets;
@@ -11,11 +8,8 @@ import model.Direction;
 import model.MoveCommand;
 import model.Player;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
-import javafx.scene.image.*;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
-import javafx.scene.text.*;
 
 public class Main extends Application {
 	public static Player me = new Player("Mathias", 1, 1, Direction.LEFT);
