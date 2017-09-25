@@ -20,13 +20,15 @@ class Server {
 	};
 	private final List<ObjectOutputStream> outputStreams = new ArrayList<>();
 	private final CommandEvent onCommand;
+	private final int port;
 	
 	public Server(int port, CommandEvent onCommand) throws IOException {
 		this.onCommand = onCommand;
-		acceptConnections(port);
+		this.port = port;
+		acceptConnections();
 	}
 
-	private void acceptConnections(int port) throws IOException {
+	private void acceptConnections() throws IOException {
 		ServerSocket server = new ServerSocket(port);
 
 		new Thread(() -> {
@@ -72,7 +74,7 @@ class Server {
 	public void connectToClients() throws Exception {
 		for (String ip : ips) {
 			System.out.println("connecting to " + ip);
-			Socket socket = new Socket(ip, 3486);
+			Socket socket = new Socket(ip, port);
 			ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
 			outputStreams.add(oos);
 		}

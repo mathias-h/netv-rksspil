@@ -21,16 +21,15 @@ public class Game {
 		this.me = me;
 		this.server = new Server(port, this::handleCommand);
 		board = new Tile[width][height];
-		
+
 		setBoard();
 	}
 
 	public void init() throws Exception {
-		
 		addPlayer(new NameCommand(me));
 		setScores();
 	}
-	
+
 	public void connectToClients() throws Exception {
 		server.connectToClients();
 
@@ -46,69 +45,72 @@ public class Game {
 			throw new Exception("invalid command type");
 		}
 	}
-	
+
 	private void setScores() {
 		boardGui.setScores(players);
 	}
 
 	private void addPlayer(NameCommand command) throws Exception {
 		Player player = command.player;
-		
+
 		players.add(player);
+
+		Tile hero = getHeroTileFromDirection(player.direction);
 		
-		boardGui.setTile(player.posX, player.posY, getHeroTileFromDirection(player.direction));
+		board[player.posX][player.posY] = hero;
+		boardGui.setTile(player.posX, player.posY, hero);
 	}
 
 	public void movePlayer(MoveCommand command) throws Exception {
-//		Player player = null;
-//		for (Player p : players) {
-//			if (p.name.equals(command.name)) {
-//				player = p;
-//			}
-//		}
-//		if (player == null) {
-//			throw new Exception("player not found: " + name);
-//		}
-//
-//		player.direction = command.dir;
-//		int x = player.getXpos(), y = player.getYpos();
-//
-//		if (board[y + command.deltaY].charAt(x + command.deltaX) == 'w') {
-//			player.addPoints(-1);
-//		} else {
-//			Player p = getPlayerAt(x + command.deltaX, y + command.deltaY);
-//			if (p != null) {
-//				player.addPoints(10);
-//				p.addPoints(-10);
-//			} else {
-//				player.addPoints(1);
-//
-//				fields[x][y].setGraphic(new ImageView(image_floor));
-//				x += command.deltaX;
-//				y += command.deltaY;
-//
-//				switch (command.dir) {
-//				case UP:
-//					fields[x][y].setGraphic(new ImageView(hero_up));
-//					break;
-//				case DOWN:
-//					fields[x][y].setGraphic(new ImageView(hero_down));
-//					break;
-//				case LEFT:
-//					fields[x][y].setGraphic(new ImageView(hero_left));
-//					break;
-//				case RIGHT:
-//					fields[x][y].setGraphic(new ImageView(hero_right));
-//					break;
-//				default:
-//					break;
-//				}
-//
-//				player.setXpos(x);
-//				player.setYpos(y);
-//			}
-//		}
-//		scoreList.setText(getScoreList());
+		// Player player = null;
+		// for (Player p : players) {
+		// if (p.name.equals(command.name)) {
+		// player = p;
+		// }
+		// }
+		// if (player == null) {
+		// throw new Exception("player not found: " + name);
+		// }
+		//
+		// player.direction = command.dir;
+		// int x = player.getXpos(), y = player.getYpos();
+		//
+		// if (board[y + command.deltaY].charAt(x + command.deltaX) == 'w') {
+		// player.addPoints(-1);
+		// } else {
+		// Player p = getPlayerAt(x + command.deltaX, y + command.deltaY);
+		// if (p != null) {
+		// player.addPoints(10);
+		// p.addPoints(-10);
+		// } else {
+		// player.addPoints(1);
+		//
+		// fields[x][y].setGraphic(new ImageView(image_floor));
+		// x += command.deltaX;
+		// y += command.deltaY;
+		//
+		// switch (command.dir) {
+		// case UP:
+		// fields[x][y].setGraphic(new ImageView(hero_up));
+		// break;
+		// case DOWN:
+		// fields[x][y].setGraphic(new ImageView(hero_down));
+		// break;
+		// case LEFT:
+		// fields[x][y].setGraphic(new ImageView(hero_left));
+		// break;
+		// case RIGHT:
+		// fields[x][y].setGraphic(new ImageView(hero_right));
+		// break;
+		// default:
+		// break;
+		// }
+		//
+		// player.setXpos(x);
+		// player.setYpos(y);
+		// }
+		// }
+		// scoreList.setText(getScoreList());
 	}
 
 	public Player getPlayerAt(int x, int y) {
@@ -153,7 +155,7 @@ public class Game {
 			}
 		}
 	}
-	
+
 	public Tile[][] getBoard() {
 		return board;
 	}
