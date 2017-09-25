@@ -59,6 +59,7 @@ public class Game {
 		
 		board[player.posX][player.posY] = hero;
 		boardGui.setTile(player.posX, player.posY, hero);
+		boardGui.setScores(players);
 	}
 
 	public void movePlayer(MoveCommand command) throws Exception {
