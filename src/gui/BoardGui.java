@@ -106,10 +106,12 @@ public class BoardGui extends GridPane {
 	}
 
 	public void setScores(List<Player> players) {
-		StringBuilder b = new StringBuilder(1000);
-		for (Player p : players) {
-			b.append(p + "\r\n");
-		}
-		scoreList.setText(b.toString());
+		Platform.runLater(() -> {
+			StringBuilder b = new StringBuilder();
+			for (Player p : players) {
+				b.append(p + "\r\n");
+			}
+			scoreList.setText(b.toString());
+		});
 	}
 }
