@@ -50,7 +50,7 @@ public class Main extends Application {
 					}
 
 					if (c != null) {
-						boardGui.game.handleCommand(c);
+						boardGui.game.handleMove(c);
 					}
 				} catch (Exception e) {
 					// TODO Auto-generated catch block

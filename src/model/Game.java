@@ -1,5 +1,6 @@
 package model;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,8 +36,13 @@ public class Game {
 
 		server.sendCommand(new NameCommand(me));
 	}
+	
+	public void handleMove(MoveCommand command) throws Exception {
+		server.sendCommand(command);
+		movePlayer(command);
+	}
 
-	public void handleCommand(Command command) throws Exception {
+	private void handleCommand(Command command) throws Exception {
 		if (command instanceof NameCommand) {
 			addPlayer((NameCommand) command);
 		} else if (command instanceof MoveCommand) {
