@@ -41,23 +41,27 @@ public class BoardGui extends GridPane {
 
 	private void initContent() {
 		GridPane boardGrid = new GridPane();
-		for (int x = 0; x < width; x++) {
-			for (int y = 0; y < height; y++) {
+		for (int y = 0; y < height; y++) {
+			for (int x = 0; x < width; x++) {
 				switch (game.getBoard()[x][y]) {
 				case WALL:
+					System.out.print("X");
 					fields[x][y] = new Label("", new ImageView(imageWall));
 					break;
 				case FLOOR:
+					System.out.print(" ");
 					fields[x][y] = new Label("", new ImageView(imageFloor));
 					break;
 				default:
 					continue;
 				}
-				boardGrid.add(fields[x][y], y, x);
+				boardGrid.add(fields[x][y], x, y);
 			}
+			System.out.println();
 		}
 		this.add(boardGrid, 0, 0);
 
+		scoreList.setEditable(false);
 		scoreList.setMaxWidth(200);
 		this.add(scoreList, 1, 0);
 
@@ -80,16 +84,22 @@ public class BoardGui extends GridPane {
 			switch (tile) {
 			case WALL:
 				graphic = new ImageView(imageWall);
+				break;
 			case FLOOR:
 				graphic = new ImageView(imageFloor);
+				break;
 			case HERO_UP:
 				graphic = new ImageView(heroUp);
+				break;
 			case HERO_DOWN:
 				graphic = new ImageView(heroDown);
+				break;
 			case HERO_LEFT:
 				graphic = new ImageView(heroLeft);
+				break;
 			case HERO_RIGHT:
 				graphic = new ImageView(heroRight);
+				break;
 			}
 
 			if (graphic == null) return;

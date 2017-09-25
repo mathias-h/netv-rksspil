@@ -56,62 +56,67 @@ public class Game {
 		players.add(player);
 
 		Tile hero = getHeroTileFromDirection(player.direction);
-		
+
 		board[player.posX][player.posY] = hero;
 		boardGui.setTile(player.posX, player.posY, hero);
 		boardGui.setScores(players);
 	}
 
 	public void movePlayer(MoveCommand command) throws Exception {
-		// Player player = null;
-		// for (Player p : players) {
-		// if (p.name.equals(command.name)) {
-		// player = p;
-		// }
-		// }
-		// if (player == null) {
-		// throw new Exception("player not found: " + name);
-		// }
-		//
-		// player.direction = command.dir;
-		// int x = player.getXpos(), y = player.getYpos();
-		//
-		// if (board[y + command.deltaY].charAt(x + command.deltaX) == 'w') {
-		// player.addPoints(-1);
-		// } else {
-		// Player p = getPlayerAt(x + command.deltaX, y + command.deltaY);
-		// if (p != null) {
-		// player.addPoints(10);
-		// p.addPoints(-10);
-		// } else {
-		// player.addPoints(1);
-		//
-		// fields[x][y].setGraphic(new ImageView(image_floor));
-		// x += command.deltaX;
-		// y += command.deltaY;
-		//
-		// switch (command.dir) {
-		// case UP:
-		// fields[x][y].setGraphic(new ImageView(hero_up));
-		// break;
-		// case DOWN:
-		// fields[x][y].setGraphic(new ImageView(hero_down));
-		// break;
-		// case LEFT:
-		// fields[x][y].setGraphic(new ImageView(hero_left));
-		// break;
-		// case RIGHT:
-		// fields[x][y].setGraphic(new ImageView(hero_right));
-		// break;
-		// default:
-		// break;
-		// }
-		//
-		// player.setXpos(x);
-		// player.setYpos(y);
-		// }
-		// }
-		// scoreList.setText(getScoreList());
+		Player player = null;
+		for (Player p : players) {
+			if (p.name.equals(command.name)) {
+				player = p;
+			}
+		}
+		if (player == null) {
+			throw new Exception("player not found: " + command.name);
+		}
+
+		player.direction = command.dir;
+		int x = player.posX, y = player.posY;
+
+		int deltaX = 0;
+		int deltaY = 0;
+
+		switch (command.dir) {
+		case UP:
+			deltaY -= 1;
+			break;
+		case DOWN:
+			deltaY += 1;
+			break;
+		case LEFT:
+			deltaX -= 1;
+			break;
+		case RIGHT:
+			deltaX += 1;
+			break;
+		}
+
+		if (board[x + deltaX][y + deltaY] == Tile.WALL) {
+			player.point -= 1;
+		} else {
+			Player p = getPlayerAt(x + deltaX, y + deltaY);
+			if (p != null) {
+				player.point += 10;
+				p.point -= 10;
+			} else {
+				Tile hero = getHeroTileFromDirection(player.direction);
+				player.point += 1;
+
+				board[x][y] = Tile.FLOOR;
+				boardGui.setTile(x, y, Tile.FLOOR);
+
+				board[x + deltaX][y + deltaY] = hero;
+				boardGui.setTile(x + deltaX, y + deltaY, hero);
+
+				player.posX += deltaX;
+				player.posY += deltaY;
+			}
+		}
+
+		boardGui.setScores(players);
 	}
 
 	public Player getPlayerAt(int x, int y) {
@@ -140,21 +145,40 @@ public class Game {
 
 	private void setBoard() {
 		String[] stringBoard = { // 20x20
-				"wwwwwwwwwwwwwwwwwwww", "w        ww        w", "w w  w  www w  w  ww", "w w  w   ww w  w  ww",
-				"w  w               w", "w w w w w w w  w  ww", "w w     www w  w  ww", "w w     w w w  w  ww",
-				"w   w w  w  w  w   w", "w     w  w  w  w   w", "w ww ww        w  ww", "w  w w    w    w  ww",
-				"w        ww w  w  ww", "w         w w  w  ww", "w        w     w  ww", "w  w              ww",
-				"w  w www  w w  ww ww", "w w      ww w     ww", "w   w   ww  w      w", "wwwwwwwwwwwwwwwwwwww" };
+				"wwwwwwwwwwwwwwwwwwww", 
+				"w        ww        w",
+				"w w  w  www w  w  ww", 
+				"w w  w   ww w  w  ww",
+				"w  w               w", 
+				"w w w w w w w  w  ww", 
+				"w w     www w  w  ww", 
+				"w w     w w w  w  ww",
+				"w   w w  w  w  w   w", 
+				"w     w  w  w  w   w", 
+				"w ww ww        w  ww", 
+				"w  w w    w    w  ww",
+				"w        ww w  w  ww", 
+				"w         w w  w  ww", 
+				"w        w     w  ww", 
+				"w  w              ww",
+				"w  w www  w w  ww ww", 
+				"w w      ww w     ww", 
+				"w   w   ww  w      w", 
+				"wwwwwwwwwwwwwwwwwwww" };
 
 		for (int y = 0; y < stringBoard.length; y++) {
-			String[] tiles = stringBoard[y].split("");
-			for (int x = 0; x < tiles.length; x++) {
-				if (tiles[x].equals("w"))
+			String tiles = stringBoard[y];
+			for (int x = 0; x < tiles.length(); x++) {
+				if (tiles.charAt(x) == 'w') {
 					board[x][y] = Tile.WALL;
+				}
+					
 				else
 					board[x][y] = Tile.FLOOR;
 			}
 		}
+		
+		int i = 0;
 	}
 
 	public Tile[][] getBoard() {
