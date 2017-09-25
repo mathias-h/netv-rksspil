@@ -45,11 +45,9 @@ public class BoardGui extends GridPane {
 			for (int x = 0; x < width; x++) {
 				switch (game.getBoard()[x][y]) {
 				case WALL:
-					System.out.print("X");
 					fields[x][y] = new Label("", new ImageView(imageWall));
 					break;
 				case FLOOR:
-					System.out.print(" ");
 					fields[x][y] = new Label("", new ImageView(imageFloor));
 					break;
 				default:
@@ -57,7 +55,6 @@ public class BoardGui extends GridPane {
 				}
 				boardGrid.add(fields[x][y], x, y);
 			}
-			System.out.println();
 		}
 		this.add(boardGrid, 0, 0);
 
@@ -109,7 +106,7 @@ public class BoardGui extends GridPane {
 	}
 
 	public void setScores(List<Player> players) {
-		StringBuffer b = new StringBuffer(100);
+		StringBuilder b = new StringBuilder(1000);
 		for (Player p : players) {
 			b.append(p + "\r\n");
 		}

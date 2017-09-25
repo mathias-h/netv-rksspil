@@ -38,8 +38,8 @@ public class Game {
 	}
 	
 	public void handleMove(MoveCommand command) throws Exception {
-		server.sendCommand(command);
 		movePlayer(command);
+		server.sendCommand(command);
 	}
 
 	private void handleCommand(Command command) throws Exception {
