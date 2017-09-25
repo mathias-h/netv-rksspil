@@ -14,9 +14,8 @@ interface CommandEvent {
 
 class Server {
 	private static final String[] ips = new String[] {
-			// "10.24.2.233",
-			"10.24.1.94",
-			// "10.24.3.193"
+			"10.24.3.193",
+			"10.24.2.85"
 	};
 	private final List<ObjectOutputStream> outputStreams = new ArrayList<>();
 	private final CommandEvent onCommand;

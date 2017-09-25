@@ -2,6 +2,7 @@ package gui;
 
 import java.util.List;
 
+import javafx.application.Platform;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
@@ -23,7 +24,7 @@ public class BoardGui extends GridPane {
 	private final Image imageFloor, imageWall, heroRight, heroLeft, heroUp, heroDown;
 
 	public BoardGui(Player me, int port) throws Exception {
-		
+
 		game = new Game(width, height, port, me, this);
 		fields = new Label[width][height];
 
@@ -33,7 +34,7 @@ public class BoardGui extends GridPane {
 		heroLeft = new Image(getClass().getResourceAsStream("Image/heroLeft.png"), size, size, false, false);
 		heroUp = new Image(getClass().getResourceAsStream("Image/heroUp.png"), size, size, false, false);
 		heroDown = new Image(getClass().getResourceAsStream("Image/heroDown.png"), size, size, false, false);
-		
+
 		initContent();
 		game.init();
 	}
@@ -59,7 +60,7 @@ public class BoardGui extends GridPane {
 
 		scoreList.setMaxWidth(200);
 		this.add(scoreList, 1, 0);
-		
+
 		Button b = new Button("connect");
 		b.setOnAction(e -> {
 			try {
@@ -73,26 +74,28 @@ public class BoardGui extends GridPane {
 	}
 
 	public void setTile(int x, int y, Tile tile) throws Exception {
-		ImageView graphic = null;
+		Platform.runLater(() -> {
+			ImageView graphic = null;
 
-		switch (tile) {
-		case WALL:
-			graphic = new ImageView(imageWall);
-		case FLOOR:
-			graphic = new ImageView(imageFloor);
-		case HERO_UP:
-			graphic = new ImageView(heroUp);
-		case HERO_DOWN:
-			graphic = new ImageView(heroDown);
-		case HERO_LEFT:
-			graphic = new ImageView(heroLeft);
-		case HERO_RIGHT:
-			graphic = new ImageView(heroRight);
-		}
-		
-		if (graphic == null) throw new Exception("tile not supported: " + tile);
+			switch (tile) {
+			case WALL:
+				graphic = new ImageView(imageWall);
+			case FLOOR:
+				graphic = new ImageView(imageFloor);
+			case HERO_UP:
+				graphic = new ImageView(heroUp);
+			case HERO_DOWN:
+				graphic = new ImageView(heroDown);
+			case HERO_LEFT:
+				graphic = new ImageView(heroLeft);
+			case HERO_RIGHT:
+				graphic = new ImageView(heroRight);
+			}
 
-		fields[x][y].setGraphic(graphic);
+			if (graphic == null) return;
+
+			fields[x][y].setGraphic(graphic);
+		});
 	}
 
 	public void setScores(List<Player> players) {
