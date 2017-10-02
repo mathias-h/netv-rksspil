@@ -16,4 +16,9 @@ public class SyncCommand extends Command {
 		REQUEST,
 		REPLY
 	}
+	
+	@Override
+	public String toString() {
+		return String.format("Sync(%s, %d, %d)", type, timestamp, processId);
+	}
 }

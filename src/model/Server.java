@@ -76,6 +76,7 @@ class Server {
 	}
 
 	public void sendCommand(Command command, int pid) throws IOException {
+		System.out.println("send: " + command);
 		for (Client client : clients) {
 			if (client.processId == pid) {
 				client.oos.writeObject(command);
