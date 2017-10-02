@@ -10,6 +10,7 @@ public class Game {
 	private final Tile[][] board;
 	private final Server server;
 	private final BoardGui boardGui;
+	private Sync sync;
 	private final Player me;
 	private final List<Player> players = new ArrayList<>();
 	public final int width;
@@ -34,16 +35,23 @@ public class Game {
 	public void connectToClients() throws Exception {
 		server.connectToClients();
 
+		sync = new Sync(server);
+		
 		server.sendCommand(new NameCommand(me));
 	}
 	
 	public void handleMove(MoveCommand command) throws Exception {
-		movePlayer(command);
-		server.sendCommand(command);
+		sync.request(() -> {
+			movePlayer(command);
+			server.sendCommand(command);
+		});
 	}
 
 	private void handleCommand(Command command) throws Exception {
-		if (command instanceof NameCommand) {
+		if (command instanceof SyncCommand) {
+			sync.handleSyncCommand((SyncCommand)command);
+		}
+		else if (command instanceof NameCommand) {
 			addPlayer((NameCommand) command);
 		} else if (command instanceof MoveCommand) {
 			movePlayer((MoveCommand) command);

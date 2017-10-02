@@ -12,19 +12,31 @@ interface CommandEvent {
 	public void fire(Command command) throws Exception;
 }
 
+class Client {
+	String ip;
+	int processId;
+	ObjectOutputStream oos;
+
+	public Client(String ip, int processId) {
+		this.ip = ip;
+		this.processId = processId;
+	}
+}
+
 class Server {
-	private static final String[] ips = new String[] {
-			"10.24.3.193",
-			"10.24.2.85"
-	};
+	private static final Client[] clients = new Client[] { new Client("10.24.3.193", 1), new Client("10.24.2.85", 2) };
 	private final List<ObjectOutputStream> outputStreams = new ArrayList<>();
 	private final CommandEvent onCommand;
 	private final int port;
-	
+
 	public Server(int port, CommandEvent onCommand) throws IOException {
 		this.onCommand = onCommand;
 		this.port = port;
 		acceptConnections();
+	}
+
+	public int numberOfClients() {
+		return outputStreams.size();
 	}
 
 	private void acceptConnections() throws IOException {
@@ -64,20 +76,25 @@ class Server {
 		}).start();
 	}
 
+	public void sendCommand(Command command, int pid) throws IOException {
+		for (Client client : clients) {
+			if (client.processId == pid) {
+				client.oos.writeObject(command);
+			}
+		}
+	}
+
 	public void sendCommand(Command command) throws IOException {
-		for (ObjectOutputStream oos : outputStreams) {
-			oos.writeObject(command);
+		for (Client client : clients) {
+			client.oos.writeObject(command);
 		}
 	}
 
 	public void connectToClients() throws Exception {
-		for (String ip : ips) {
-			System.out.println("connecting to " + ip);
-			Socket socket = new Socket(ip, port);
+		for (Client client : clients) {
+			Socket socket = new Socket(client.ip, port);
 			ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
-			outputStreams.add(oos);
+			client.oos = oos;
 		}
-
-		
 	}
 }
