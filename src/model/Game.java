@@ -41,11 +41,13 @@ public class Game {
 		server.sendCommand(new NameCommand(me));
 	}
 	
-	public void handleMove(MoveCommand command) throws Exception {
-		sync.request(() -> {
-			movePlayer(command);
-			server.sendCommand(command);
-		});
+	public void handleMove(MoveCommand command) {
+		try {
+			sync.request(() -> {
+				movePlayer(command);
+				server.sendCommand(command);
+			});
+		} catch (Exception e) {}
 	}
 
 	private void handleCommand(Command command) throws Exception {
@@ -107,6 +109,7 @@ public class Game {
 		case RIGHT:
 			deltaX += 1;
 			break;
+		default: break;
 		}
 
 		if (board[x + deltaX][y + deltaY] == Tile.WALL) {

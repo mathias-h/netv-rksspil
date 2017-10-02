@@ -21,7 +21,10 @@ public class Sync {
 		messages = new SyncCommand[server.numberOfClients() + 1];
 	}
 
-	public void request(AccessCallback onAccess) throws IOException {
+	public void request(AccessCallback onAccess) throws Exception {
+		if (this.onAccess != null) {
+			throw new Exception("alerady waiting");
+		}
 		SyncCommand request = new SyncCommand(SyncCommand.Type.REQUEST, timestamp, processId);
 		server.sendCommand(request);
 		messages[processId] = request;
@@ -42,7 +45,7 @@ public class Sync {
 	}
 
 	public void handleSyncCommand(SyncCommand command) throws Exception {
-		System.out.println("receive: " + command);
+		System.out.println("received: " + command);
 		
 		if (command.type == SyncCommand.Type.REQUEST) {
 			if (onAccess == null) {

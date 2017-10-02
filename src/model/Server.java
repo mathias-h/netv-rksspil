@@ -24,7 +24,7 @@ class Client {
 }
 
 class Server {
-	private final Client[] clients = new Client[] { new Client("10.24.2.146", 1), new Client("10.24.1.181", 0) };
+	private final Client[] clients = { new Client("10.24.2.146", 1), new Client("10.24.1.181", 0) };
 	private final CommandEvent onCommand;
 	private final int port;
 
@@ -76,7 +76,7 @@ class Server {
 	}
 
 	public void sendCommand(Command command, int pid) throws IOException {
-		System.out.println("send: " + command);
+		System.out.println("sent: " + command);
 		for (Client client : clients) {
 			if (client.processId == pid) {
 				client.oos.writeObject(command);

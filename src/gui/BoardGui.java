@@ -97,9 +97,8 @@ public class BoardGui extends GridPane {
 			case HERO_RIGHT:
 				graphic = new ImageView(heroRight);
 				break;
+			default: throw new RuntimeException("tile not supported");
 			}
-
-			if (graphic == null) return;
 
 			fields[x][y].setGraphic(graphic);
 		});
