@@ -1,6 +1,5 @@
 package model;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,7 +11,7 @@ public class Game {
 	private final BoardGui boardGui;
 	private Sync sync;
 	private final Player me;
-	private final int processId = 2;
+	private final int processId = 1;
 	private final List<Player> players = new ArrayList<>();
 	public final int width;
 	public final int height;

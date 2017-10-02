@@ -24,7 +24,7 @@ class Client {
 }
 
 class Server {
-	private final Client[] clients = { new Client("10.24.2.146", 1), new Client("10.24.1.181", 0) };
+	private final Client[] clients = { new Client("10.24.1.181", 0) };
 	private final CommandEvent onCommand;
 	private final int port;
 
