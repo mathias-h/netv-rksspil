@@ -16,7 +16,7 @@ public class Sync {
 
 	public Sync(Server server) {
 		this.server = server;
-		messages = new SyncCommand[server.numberOfClients()];
+		messages = new SyncCommand[server.numberOfClients()+1];
 	}
 
 	public void request(AccessCallback onAccess) throws IOException {

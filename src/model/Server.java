@@ -24,8 +24,7 @@ class Client {
 }
 
 class Server {
-	private static final Client[] clients = new Client[] { new Client("10.24.3.193", 1), new Client("10.24.2.85", 2) };
-	private final List<ObjectOutputStream> outputStreams = new ArrayList<>();
+	private final Client[] clients = new Client[] { new Client("10.24.2.146", 1), new Client("10.24.1.181", 0) };
 	private final CommandEvent onCommand;
 	private final int port;
 
@@ -36,7 +35,7 @@ class Server {
 	}
 
 	public int numberOfClients() {
-		return outputStreams.size();
+		return clients.length;
 	}
 
 	private void acceptConnections() throws IOException {
